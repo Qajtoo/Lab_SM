@@ -1,0 +1,33 @@
+# zmienne oraz funckje potrzebne do odbierania informacji
+/* USER CODE BEGIN PV */
+	char msg_str[32];
+	int speed = 10000;
+	int str_len = 5;
+	void parse_control_message(char* msg_str);
+	void control();
+/* USER CODE END PV */
+
+/* USER CODE BEGIN 2 */
+  HAL_UART_Receive_IT(&huart3, (uint8_t*)msg_str, str_len);
+/* USER CODE END 2 */
+
+/* USER CODE BEGIN 4 */
+
+	void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+	{
+		if(huart->Instance == USART3)
+		{
+			parse_control_message(msg_str);
+			control_timer();
+			HAL_UART_Receive_IT(&huart3, (uint8_t*)msg_str, str_len);
+		}
+	}
+	void parse_control_message(char* msg_str)
+	{
+		sscanf(&msg_str[0], "%d", &speed);
+	}
+	void control()
+	{
+		__HAL_TIM_SET_AUTORELOAD(&htim4, speed);
+	}
+/* USER CODE END 4 */
