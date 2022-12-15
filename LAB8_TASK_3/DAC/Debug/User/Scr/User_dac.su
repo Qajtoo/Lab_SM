@@ -1,0 +1,3 @@
+../User/Scr/User_dac.c:10:6:DAC_SetVoltage	32	static
+../User/Scr/User_dac.c:15:7:parse_control_Amplitiude	24	static
+../User/Scr/User_dac.c:22:7:control_offset	24	static
