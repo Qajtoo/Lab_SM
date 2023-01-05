@@ -1,16 +1,19 @@
+%% Finite impulse response filter unit test
 %%% File info 
 %
 % ************************************************************************
 %
 %  @file     unit_test_fir.m
 %  @author   Adrian Wojcik
-%  @version  1.0
+%  @version  2.0
 %  @date     12-Dec-2020 19:59:05
-%  @brief    Simple digital low-pass filter design and test
+%  @brief    Simple FIR digital low-pass filter design and test
 %
 % ************************************************************************
 %
-%% Test signal
+close all; clc;
+clear variables;
+%% TEST SIGNAL
 % sample time & freq
 ts = 0.001; % [s]
 fs = 1/ts;  % [Hz]
@@ -43,7 +46,7 @@ fxvec = frange*fs;                               % [Hz]
 Axvec = abs(fftshift(fft(xvec,length(nvec)))); % [-]
 Axvec = Axvec / length(nvec);
 
-%% FIR design
+%% FILTER EXAMPLE 
 
 % Filter desired parameters
 % cut-off frequency
@@ -99,19 +102,21 @@ subplot(2,2,1)
   title('Orginal test signal time series');
   hold off;
 subplot(2,2,2)
-  ax = plotyy (fxvec, Axvec, ...
-               fhvec, Ahvec_v1, ...
-               @plot, @plot); hold on; grid on;
-  xlabel("Frequency [Hz]");
-  ylabel(ax(1), "Amplitude spectrum [-]");
-  ylabel(ax(2), "Amplitude response [dB]"); 
-  plot([f1 f1], AdBminmax, 'k--');
-  plot([f2 f2], AdBminmax, 'k--'); 
-  set(ax(1),'YLim', [0 0.51*3.3], 'XLim', fminmax);
-  set(ax(2),'YLim', AdBminmax, 'XLim', fminmax);
-  set(ax(2),'XTick',[], 'xcolor',[1 1 1]);
-  title('Original test signal ampltitude spectrum');
-  hold off;
+  yyaxis left
+    plot(fxvec, Axvec, '-');
+    xlabel("Frequency [Hz]");
+    ylabel("Amplitude spectrum [-]");
+    set(gca,'YLim', [0 0.51*3.3], 'XLim', fminmax);
+    hold on;
+    grid on;
+  yyaxis right
+    plot(fhvec, Ahvec_v1, '-');
+    ylabel("Amplitude response [dB]"); 
+    plot([f1 f1], AdBminmax, 'k--');
+    plot([f2 f2], AdBminmax, 'k--'); 
+    set(gca,'YLim', AdBminmax, 'XLim', fminmax);
+    title('Original test signal ampltitude spectrum');
+    hold off;
 subplot(2,2,3)
   plot(nvec/fs, xfvec, 'b'); grid on; hold on;
   xlabel("Time [s]");
@@ -120,34 +125,25 @@ subplot(2,2,3)
   title('Filtered test signal time series');
   hold off;
 subplot(2,2,4)
-  ax = plotyy (fxvec, Axfvec, ...
-               fhvec, Ahvec_v2, ...
-               @plot, @plot); hold on; grid on;
-  xlabel("Frequency [Hz]");
-  ylabel(ax(1), "Amplitude spectrum [-]");
-  ylabel(ax(2), "Amplitude response [dB]"); 
-  plot([f1 f1], AdBminmax, 'k--');
-  plot([f2 f2], AdBminmax, 'k--'); 
-  set(ax(1),'YLim', [0 0.51*3.3], 'XLim', fminmax);
-  set(ax(2),'YLim', AdBminmax, 'XLim', fminmax);
-  set(ax(2),'XTick',[], 'xcolor',[1 1 1]);
-  title('Filtered test signal ampltitude spectrum');
-  hold off;
+  yyaxis left
+    plot(fxvec, Axfvec, '-');
+    xlabel("Frequency [Hz]");
+    ylabel("Amplitude spectrum [-]");
+    set(gca, 'YLim', [0 0.51*3.3], 'XLim', fminmax);
+    hold on; grid on
+  yyaxis right
+    plot(fhvec, Ahvec_v2, '-');  
+    ylabel("Amplitude response [dB]"); 
+    plot([f1 f1], AdBminmax, 'k--');
+    plot([f2 f2], AdBminmax, 'k--'); 
+    set(gca, 'YLim', AdBminmax, 'XLim', fminmax);
+    title('Filtered test signal ampltitude spectrum');
+    hold off;
   
-%% Save data to .csv files
+%% EXPORT FILTER TO .C/.H FILES
+generate_fir('FIR1', b, 1);
 
-% Number of taps (== number of coefficients == order+1) 
-VEC2CSV('fir_ntaps.csv', N+1, 0);
-
-% Test signal
-VEC2CSV('fir_x.csv', xvec, 30);
-VEC2CSV('fir_y.csv', zeros(size(xvec)), 1);
-
-% Reference output signal
-VEC2CSV('fir_yref.csv', xfvec, 30);
-
-% Filter coefficients
-VEC2CSV('fir_b.csv', b, 30);
-
-% Filter initial state
-VEC2CSV('fir_state_init.csv', zeros(size(b)), 1);
+%% SAVE TEST DATA TO .C/.H AND .CSV FILES
+generate_vec('X1', xvec);
+generate_vec('Y1', zeros(size(xfvec)));
+generate_vec('Y1_REF', xfvec);

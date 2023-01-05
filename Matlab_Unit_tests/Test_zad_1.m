@@ -1,48 +1,36 @@
 %% Matrix multiplication unit test
-
 %%% File info 
 %
 % ************************************************************************
 %
 %  @file     unit_test_mat_mult.m
 %  @author   Adrian Wojcik
-%  @version  1.0
+%  @version  2.0
 %  @date     15-Dec-2020 08:55:55
-%  @brief    TODO
+%  @brief    Generates source, header and data (.csv) files for matrix
+%            multiplication unit test
 %
 % ************************************************************************
 %
 close all; clc;
-clear A x y
-%% Matrix multiplication
+clear A B C_REF
+%% MATRIX MULTIPLICATION
 
-A = [5 2 3; 1 2 1; 2 3 2];
-x = [0.2 0.5 0.3]';
-
-yref = A*x;
+A = single(rand(3,3));
+B = single(rand(3,1));
+C_REF = A*B;
 
 disp("LHS ARGUMENT (MATRIX)");
 disp(A);
 
 disp("RHS ARGUMENT (COLUMN VECTOR)");
-disp(x);
+disp(B);
 
 disp("REFERENCE RESULT:");
-disp(yref);
+disp(C_REF);
 
-%% Display CMSIS data
-fprintf("A MATRIX:\n");
-A = MAT2CMSIS(A);
-fprintf("\n");
-
-fprintf("X VECTOR:\n");
-x = MAT2CMSIS(x);
-fprintf("\n");
-
-fprintf("Y VECTOR:\n");
-y = MAT2CMSIS([ 0 0 0 ]);
-fprintf("\n");
-
-fprintf("YREF VECTOR:\n");
-yref = MAT2CMSIS(yref);
-fprintf("\n");
+%% EXPORT MATRICES TO .C/.H FILES
+generate_mat('A', A);
+generate_mat('B', B);
+generate_mat('C', zeros(size(C_REF)));
+generate_mat('C_REF', C_REF);
