@@ -1,0 +1,7 @@
+../Tests/Src/CmsisDspTest.c:16:11:RMSE	64	dynamic
+../Tests/Src/CmsisDspTest.c:25:6:TestCmsisDsp_RMSE	56	static
+../Tests/Src/CmsisDspTest.c:42:6:TestCmsisDsp_MAT_MULT	32	static
+../Tests/Src/CmsisDspTest.c:71:6:TestCmsisDsp_FIR	32	static
+../Tests/Src/CmsisDspTest.c:103:6:TestCmsisDsp_IIR	24	static
+../Tests/Src/CmsisDspTest.c:135:6:TestCmsisDsp_PID	40	static
+../Tests/Src/CmsisDspTest.c:165:10:CuGetCmsisDspSuite	16	static

@@ -93,10 +93,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-  float32_t a[] = {1.0,1.0};
-  float32_t a_amp = 0;
-
-  arm_cmplx_mag_f32(a,&a_amp,1);
+  RunAllTests();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

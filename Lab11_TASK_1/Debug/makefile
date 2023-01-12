@@ -9,9 +9,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Tests/Src/subdir.mk
 -include Drivers/STM32F7xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
+-include Components/Src/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -61,7 +63,7 @@ main-build: CMSIS_2.elf secondary-outputs
 
 # Tool invocations
 CMSIS_2.elf CMSIS_2.map: $(OBJS) $(USER_OBJS) C:\Users\Mateusz\Desktop\Lab_SM\Lab_SM\Lab11_TASK_1\STM32F746ZGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CMSIS_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Mateusz\Desktop\Lab_SM\Lab_SM\Lab11_TASK_1\STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CMSIS_2.map" -Wl,--gc-sections -static -L"..\Lab_SM\CMSIS\DSP\Lib\GCC" -L"C:\Users\Mateusz\Desktop\Lab_SM\Lab_SM\CMSIS\DSP\Lib\GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "CMSIS_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Mateusz\Desktop\Lab_SM\Lab_SM\Lab11_TASK_1\STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CMSIS_2.map" -Wl,--gc-sections -static -L"..\Lab_SM\CMSIS\DSP\Lib\GCC" -L"C:\Users\Mateusz\Desktop\Lab_SM\Lab_SM\CMSIS\DSP\Lib\GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
